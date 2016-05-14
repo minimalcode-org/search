@@ -1,5 +1,5 @@
 {
-  "name": "minimalcode-org/search",
+  "name": "minimalcode/search",
   "type": "library",
   "description": "Fluent Lucene-Sorl Query Builder for PHP",
   "keywords": ["solr", "lucene", "query", "builder"],
