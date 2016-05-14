@@ -95,63 +95,93 @@ class CriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testWhereNotStringException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where(2);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testWhereEmptyStringException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('');
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testFuzzyWithInvalidDistanceException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->fuzzy('a b', 2);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testSloppyWithInvalidDistanceException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->sloppy('a b', -2);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testSloppyWithSingleWordException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->sloppy('a', 1);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testBoostNegativeException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->boost(-1.0);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testWithinCircleNegativeDistanceException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->withinCircle(1.0, 1.0, -1);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testNearCircleNegativeDistanceException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->nearCircle(1.0, 1.0, -1);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testStartsWithBlanksException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->startsWith('a b c');
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testEndsWithBlanksException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         Criteria::where('field_1')->endsWith('a b c');
     }
     
