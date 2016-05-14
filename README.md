@@ -1,6 +1,8 @@
 Minimalcode Search
 ======================
 
+[![Build Status](https://travis-ci.org/minimalcode-org/search.svg)](https://travis-ci.org/minimalcode-org/search)
+
 Minimalistic stand-alone **PHP** implementation of **Spring Solr Data Criteria**.
 
 The implementation is remade from scratch in PHP, but it follows 1:1 (for what it's possible)
@@ -118,4 +120,4 @@ The string is generated with **$criteria->getQuery()** or casting **(string) $cr
     //     )"
 ```
 
-And there is more features... See CriteriaReadmeTest for additional examples.
+And there is more features... See [CriteriaReadmeTest](https://github.com/minimalcode-org/search/tree/master/tests/Minimalcode/Search) for additional examples.
