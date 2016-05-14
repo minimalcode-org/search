@@ -6,3 +6,5 @@ php:
     - 5.6
     - 7.0
     - hhvm
+
+script: phpunit --configuration ./phpunit.xml.dist
