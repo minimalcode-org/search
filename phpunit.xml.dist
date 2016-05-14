@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true" verbose="true" bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Search Criteria">
+            <directory>./tests/Minimalcode/Search/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src/Minimalcode/Search</directory>
+        </whitelist>
+    </filter>
+</phpunit>
