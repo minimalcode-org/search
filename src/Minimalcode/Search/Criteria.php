@@ -29,13 +29,10 @@ use Minimalcode\Search\Internal\Node;
  * Criteria is the central class when constructing queries. It follows more or less
  * a fluent API style, which allows to easily chain together multiple criteria.
  *
- * @author Fabio Piro
+ * @author Fabio Piro <pirofabio@gmail.com>
  */
 class Criteria
 {
-    /** @var string */
-    const WILDCARD = '*';
-
     /** @var string[] */
     private $predicates = [];
 
@@ -135,8 +132,8 @@ class Criteria
      */
     public function between($lowerBound, $upperBound, $includeLowerBound = true, $includeUpperBound = true)
     {
-        $lowerBound = ($lowerBound === null) ? self::WILDCARD : $lowerBound;
-        $upperBound = ($upperBound === null) ? self::WILDCARD : $upperBound;
+        $lowerBound = ($lowerBound === null) ? '*' : $lowerBound;
+        $upperBound = ($upperBound === null) ? '*' : $upperBound;
         $this->predicates[] = ($includeLowerBound ? '[' : '{') . $this->processValue($lowerBound) . ' TO ' . $this->processValue($upperBound) . ($includeUpperBound ? ']' : '}');
 
         return $this;
@@ -234,8 +231,8 @@ class Criteria
      * The geofilt filter allows you to retrieve results based on the geospatial distance
      * (AKA the "great circle distance") from a given point.
      *
-     * @param double $latitude
-     * @param double $longitude
+     * @param float $latitude
+     * @param float $longitude
      * @param float $distance
      * @return $this
      * @throws \InvalidArgumentException if radius is negative
@@ -254,10 +251,10 @@ class Criteria
      *
      * Finds exactly everything in a rectangular area, such as the area covered by a map the user is looking at.
      *
-     * @param double $startLatitude
-     * @param double $startLongitude
-     * @param double $endLatitude
-     * @param double $endLongitude
+     * @param float $startLatitude
+     * @param float $startLongitude
+     * @param float $endLatitude
+     * @param float $endLongitude
      * @return $this
      */
     public function withinBox($startLatitude, $startLongitude, $endLatitude, $endLongitude)
@@ -274,8 +271,8 @@ class Criteria
      * The rectangular shape is faster to compute and so it's sometimes used as an alternative to !geofilt
      * when it's acceptable to return points outside of the radius.
      *
-     * @param double $latitude
-     * @param double $longitude
+     * @param float $latitude
+     * @param float $longitude
      * @param float $distance
      * @return $this
      * @throws \InvalidArgumentException if radius is negative
@@ -322,7 +319,7 @@ class Criteria
                 $this->contains($item);
             }
         } else {
-            $this->predicates[] = self::WILDCARD . $this->processValue($value) . self::WILDCARD;
+            $this->predicates[] = '*' . $this->processValue($value) . '*';
         }
 
         return $this;
@@ -343,7 +340,7 @@ class Criteria
             }
         } else {
             $this->assertNotBlanks($prefix);
-            $this->predicates[] = $this->processValue($prefix) . self::WILDCARD;
+            $this->predicates[] = $this->processValue($prefix) . '*';
         }
 
         return $this;
@@ -364,7 +361,7 @@ class Criteria
             }
         } else {
             $this->assertNotBlanks($postfix);
-            $this->predicates[] = self::WILDCARD . $this->processValue($postfix);
+            $this->predicates[] = '*' . $this->processValue($postfix);
         }
 
         return $this;
@@ -583,7 +580,7 @@ class Criteria
      */
     private function processValue($value)
     {
-        if($value === self::WILDCARD) {
+        if($value === '*') {
             return $value;
         }
 
