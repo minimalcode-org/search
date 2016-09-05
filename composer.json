@@ -17,6 +17,9 @@
   "require-dev": {
     "phpunit/phpunit": "4.8.*"
   },
+  "suggest": {
+    "solarium/solarium": "*"
+  },
   "autoload": {
     "psr-4": { "Minimalcode\\Search\\": "src/Minimalcode/Search/" }
   }
