@@ -326,6 +326,25 @@ class Criteria
     }
 
     /**
+     * Crates new predicate with leading and trailing " for each entry making phrases.
+     *
+     * @param $value
+     * @return $this
+     */
+    public function phrase($value)
+    {
+        if(\is_array($value)) {
+            foreach ($value as $item) {
+                $this->phrase($item);
+            }
+        } else {
+            $this->predicates[] = '"' . $this->processValue($value) . '"';
+        }
+
+        return $this;
+    }
+
+    /**
      * Crates new predicate with trailing wildcard for each entry.
      *
      * @param string|string[] $prefix
