@@ -70,6 +70,15 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
+    public function testPhrase()
+    {
+        $criteria = Criteria::where('field_1')->phrase('phrase');
+
+        self::assertEquals('field_1', $this->getField($criteria));
+        self::assertEquals('field_1:"phrase"', $criteria->getQuery());
+        self::assertCount(1, $this->getPredicates($criteria));
+    }
+
     public function testContainsWithMultipleValues() 
     {
         $criteria = Criteria::where('field_1')->contains(['one', 'two', 'three']);
