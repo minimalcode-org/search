@@ -16,7 +16,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testMultipleIs() 
+    public function testMultipleIs()
     {
         $criteria = Criteria::where('field_1')->is('is')->is('another is');
 
@@ -25,7 +25,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(2, $this->getPredicates($criteria));
     }
 
-    public function testEndsWith() 
+    public function testEndsWith()
     {
         $criteria = Criteria::where('field_1')->endsWith('end');
 
@@ -34,7 +34,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testEndsWithMulitpleValues() 
+    public function testEndsWithMulitpleValues()
     {
         $criteria = Criteria::where('field_1')->endsWith(['one', 'two', 'three']);
 
@@ -43,7 +43,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(3, $this->getPredicates($criteria));
     }
 
-    public function testStartsWith() 
+    public function testStartsWith()
     {
         $criteria = Criteria::where('field_1')->startsWith('start');
 
@@ -52,7 +52,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testStartsWithMultipleValues() 
+    public function testStartsWithMultipleValues()
     {
         $criteria = Criteria::where('field_1')->startsWith(['one', 'two', 'three']);
 
@@ -61,7 +61,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(3, $this->getPredicates($criteria));
     }
 
-    public function testContains() 
+    public function testContains()
     {
         $criteria = Criteria::where('field_1')->contains('contains');
 
@@ -70,7 +70,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testContainsWithMultipleValues() 
+    public function testContainsWithMultipleValues()
     {
         $criteria = Criteria::where('field_1')->contains(['one', 'two', 'three']);
 
@@ -79,7 +79,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(3, $this->getPredicates($criteria));
     }
     
-    public function testExpression() 
+    public function testExpression()
     {
         $criteria = Criteria::where('field_1')->expression('(have fun using +solr && expressions*)');
         
@@ -87,7 +87,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
     
-    public function testCriteriaChain() 
+    public function testCriteriaChain()
     {
         $criteria = Criteria::where('field_1')
             ->startsWith('start')
@@ -100,7 +100,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(4, $this->getPredicates($criteria));
     }
 
-    public function testAnd() 
+    public function testAnd()
     {
         $criteria = Criteria::where('field_1')
             ->startsWith('start')
@@ -113,7 +113,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(2, $this->getPredicates($criteria));
     }
 
-    public function testOr() 
+    public function testOr()
     {
         $criteria = Criteria::where('field_1')
             ->startsWith('start')
@@ -125,42 +125,42 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(2, $this->getPredicates($criteria));
     }
     
-    public function testCriteriaWithWhiteSpace() 
+    public function testCriteriaWithWhiteSpace()
     {
         $criteria = Criteria::where('field_1')->is('white space');
-        self::assertEquals("field_1:\"white space\"", $criteria->getQuery());
+        self::assertEquals('field_1:"white space"', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testIsNot() 
+    public function testIsNot()
     {
         $criteria = Criteria::where('field_1')->is('value_1')->not();
         self::assertEquals('-field_1:value_1', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testFuzzy() 
+    public function testFuzzy()
     {
         $criteria = Criteria::where('field_1')->fuzzy('value_1');
         self::assertEquals('field_1:value_1~', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testFuzzyWithDistance() 
+    public function testFuzzyWithDistance()
     {
         $criteria = Criteria::where('field_1')->fuzzy('value_1', 0.5);
         self::assertEquals('field_1:value_1~0.5', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testSloppy() 
+    public function testSloppy()
     {
         $criteria = Criteria::where('field_1')->sloppy('value1 value2', 2);
-        self::assertEquals("field_1:\"value1 value2\"~2", $criteria->getQuery());
+        self::assertEquals('field_1:"value1 value2"~2', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testBoost() 
+    public function testBoost()
     {
         $criteria = Criteria::where('field_1')->is('value_1')->boost(2.0);
         self::assertEquals('field_1:value_1^2.0', $criteria->getQuery());
@@ -228,7 +228,8 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testIn() {
+    public function testIn()
+    {
         $criteria = Criteria::where('field_1')->in([1, 2, 3, 5, 8, 13, 21]);
         self::assertEquals('field_1:(1 2 3 5 8 13 21)', $criteria->getQuery());
         self::assertCount(7, $this->getPredicates($criteria));
@@ -241,7 +242,8 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testNear() {
+    public function testNear()
+    {
         $criteria = Criteria::where('field_1')->nearCircle(48.303056, 14.290556, 5);
         self::assertEquals('{!bbox pt=48.303056,14.290556 sfield=field_1 d=5.0}', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
@@ -254,7 +256,7 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testNearWithCoords() 
+    public function testNearWithCoords()
     {
         $criteria = Criteria::where('field_1')->withinBox(48.303056, 14.290556, 48.303056, 14.290556);
         self::assertEquals('field_1:[48.303056,14.290556 TO 48.303056,14.290556]', $criteria->getQuery());
@@ -287,7 +289,8 @@ class SpringCriteriaTest extends CriteriaBaseTest
 
         self::assertEquals(
             'field_1:(foo bar) AND (field_2:(bar lala) OR field_3:roo) OR (field_4:spring AND field_5:data)',
-            $criteria->getQuery());
+            $criteria->getQuery()
+        );
 
         self::assertCount(2, $this->getPredicates($criteria));
     }
@@ -346,17 +349,18 @@ class SpringCriteriaTest extends CriteriaBaseTest
 
         self::assertEquals(
             'field_1:foo AND (field_2:bar AND field_3:roo AND (field_4:spring AND field_5:data OR field_6:solr))',
-            $criteria->getQuery());
+            $criteria->getQuery()
+        );
 
         self::assertCount(1, $this->getPredicates($criteria));
-
     }
 
     /**
      * @see DATASOLR-168
      * @throws \InvalidArgumentException
      */
-    public function testNotCritieraCarriedOnPorperlyForNullAndNotNull() {
+    public function testNotCritieraCarriedOnPorperlyForNullAndNotNull()
+    {
         $criteria = Criteria::where('param1')->isNotNull()
             ->andWhere('param2')->isNull();// Nesting
 
@@ -368,7 +372,8 @@ class SpringCriteriaTest extends CriteriaBaseTest
      * @see DATASOLR-196
      * @throws \InvalidArgumentException
      */
-    public function testConnectShouldAllowConcatinationOfCriteriaWithAndPreservingDesiredBracketing() {
+    public function testConnectShouldAllowConcatinationOfCriteriaWithAndPreservingDesiredBracketing()
+    {
         $part1 = Criteria::where('z')->is('roo');
         $part2 = Criteria::where('x')->is('foo')->orWhere('y')->is('bar');
         $criteria = $part1->connect()->andWhere($part2);
@@ -381,7 +386,8 @@ class SpringCriteriaTest extends CriteriaBaseTest
      * @see DATASOLR-196
      * @throws \InvalidArgumentException
      */
-    public function testConnectShouldAllowConcatinationOfCriteriaWithAndPreservingDesiredBracketingReverse() {
+    public function testConnectShouldAllowConcatinationOfCriteriaWithAndPreservingDesiredBracketingReverse()
+    {
         $part1 = Criteria::where('z')->is('roo');
         $part2 = Criteria::where('x')->is('foo')->orWhere('y')->is('bar');
         $criteria = $part2->connect()->andWhere($part1);
@@ -473,8 +479,9 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testCriteriaWithDoubleQuotes() {
+    public function testCriteriaWithDoubleQuotes()
+    {
         $criteria =  Criteria::where('field_1')->is('with \"quote');
-		self::assertEquals('field_1:"with \\\\\"quote"', $criteria->getQuery());
-	}
+        self::assertEquals('field_1:"with \\\\\"quote"', $criteria->getQuery());
+    }
 }

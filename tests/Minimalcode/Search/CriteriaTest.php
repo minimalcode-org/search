@@ -11,7 +11,7 @@ class CriteriaTest extends CriteriaBaseTest
         $criteria = Criteria::where('field_1')->withinBox(-48.303056, -14.290556, -48.303056, -14.290556);
 
         self::assertEquals('field_1', $this->getField($criteria));
-        self::assertEquals("field_1:[\\-48.303056,\\-14.290556 TO \\-48.303056,\\-14.290556]", $criteria->getQuery());
+        self::assertEquals('field_1:[-48.303056,-14.290556 TO -48.303056,-14.290556]', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
@@ -20,7 +20,7 @@ class CriteriaTest extends CriteriaBaseTest
         $criteria = Criteria::where('field_1')->withinCircle(-48.303056, -14.290556, 5);
 
         self::assertEquals('field_1', $this->getField($criteria));
-        self::assertEquals("{!geofilt pt=\\-48.303056,\\-14.290556 sfield=field_1 d=5.0}", $criteria->getQuery());
+        self::assertEquals('{!geofilt pt=-48.303056,-14.290556 sfield=field_1 d=5.0}', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
@@ -29,7 +29,7 @@ class CriteriaTest extends CriteriaBaseTest
         $criteria = Criteria::where('field_1')->withinCircle(-48.303056, -14.290556, 5.123456);
 
         self::assertEquals('field_1', $this->getField($criteria));
-        self::assertEquals("{!geofilt pt=\\-48.303056,\\-14.290556 sfield=field_1 d=5.123456}", $criteria->getQuery());
+        self::assertEquals('{!geofilt pt=-48.303056,-14.290556 sfield=field_1 d=5.123456}', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 

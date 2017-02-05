@@ -20,14 +20,14 @@ use Minimalcode\Search\Criteria;
 
 /**
  * Node tree rappresentation for Criteria.
- * 
+ *
  * This tree-like logic is needeed for features like nesting and connecting.
- * 
+ *
  * The class is actually a clear abstract+impls architecture, but for the lack of
  * private classes in PHP language (and to keep the classes count low) the
- * implementation is just marked as internal and switched at runtime through 
+ * implementation is just marked as internal and switched at runtime through
  * the TYPE property.
- * 
+ *
  * @author Fabio Piro
  * @internal
  */
@@ -113,7 +113,7 @@ use Minimalcode\Search\Criteria;
 
     /**
      * Connects the children to a new parent tree.
-     * 
+     *
      * @return $this
      */
     public function connect()

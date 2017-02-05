@@ -61,11 +61,11 @@ class Criteria
      */
     private function __construct($field, Node $root)
     {
-        if(! \is_string($field)) {
+        if (!\is_string($field)) {
             throw new InvalidArgumentException('Criteria\'s field must be a string type.');
         }
 
-        if($field === '') {
+        if ($field === '') {
             throw new InvalidArgumentException('Field name for criteria must not be null/empty.');
         }
 
@@ -96,9 +96,9 @@ class Criteria
      * @return $this
      * @throws \InvalidArgumentException if field is not a string or a Criteria object
      */
-    public function andWhere($field) 
+    public function andWhere($field)
     {
-        if($field instanceof Criteria) {
+        if ($field instanceof Criteria) {
             return $this->root->inject(Node::OPERATOR_AND, $field->root)->getMostRecentCriteria();
         }
 
@@ -112,9 +112,9 @@ class Criteria
      * @return $this
      * @throws \InvalidArgumentException if field is not a string or a Criteria object
      */
-    public function orWhere($field) 
+    public function orWhere($field)
     {
-        if($field instanceof Criteria) {
+        if ($field instanceof Criteria) {
             return $this->root->inject(Node::OPERATOR_OR, $field->root)->getMostRecentCriteria();
         }
 
@@ -134,7 +134,8 @@ class Criteria
     {
         $lowerBound = ($lowerBound === null) ? '*' : $lowerBound;
         $upperBound = ($upperBound === null) ? '*' : $upperBound;
-        $this->predicates[] = ($includeLowerBound ? '[' : '{') . $this->processValue($lowerBound) . ' TO ' . $this->processValue($upperBound) . ($includeUpperBound ? ']' : '}');
+        $this->predicates[] = ($includeLowerBound ? '[' : '{') . $this->processValue($lowerBound) .
+            ' TO ' . $this->processValue($upperBound) . ($includeUpperBound ? ']' : '}');
 
         return $this;
     }
@@ -193,11 +194,11 @@ class Criteria
      */
     public function is($value)
     {
-        if($value === null) {
+        if ($value === null) {
             return $this->isNull();
         }
 
-        if(\is_array($value)) {
+        if (\is_array($value)) {
             return $this->in($value);
         }
 
@@ -215,7 +216,7 @@ class Criteria
     public function in(array $values)
     {
         foreach ($values as $value) {
-            if(\is_array($value)) {
+            if (\is_array($value)) {
                 $this->in($value);
             } else {
                 $this->is($value);
@@ -240,7 +241,9 @@ class Criteria
     public function withinCircle($latitude, $longitude, $distance)
     {
         $this->assertPositiveFloat($distance);
-        $this->predicates[] = '{!geofilt pt=' . $this->processValue($latitude) . ',' . $this->processValue($longitude) . ' sfield=' . $this->field . ' d=' . $this->processFloat($distance) . '}';
+        $this->predicates[] = '{!geofilt pt=' . $this->processFloat($latitude) . ',' .
+            $this->processFloat($longitude) . ' sfield=' . $this->field . ' d=' . $this->processFloat($distance) . '}';
+
         $this->isHideFieldName = true;
 
         return $this;
@@ -259,7 +262,8 @@ class Criteria
      */
     public function withinBox($startLatitude, $startLongitude, $endLatitude, $endLongitude)
     {
-        $this->predicates[] = '[' . $this->processValue($startLatitude) . ',' . $this->processValue($startLongitude) . ' TO ' . $this->processValue($endLatitude) . ',' . $this->processValue($endLongitude) . ']';
+        $this->predicates[] = '[' . $this->processFloat($startLatitude) . ',' . $this->processFloat($startLongitude) .
+            ' TO ' . $this->processFloat($endLatitude) . ',' . $this->processFloat($endLongitude) . ']';
 
         return $this;
     }
@@ -280,7 +284,9 @@ class Criteria
     public function nearCircle($latitude, $longitude, $distance)
     {
         $this->assertPositiveFloat($distance);
-        $this->predicates[] = '{!bbox pt=' . $this->processValue($latitude) . ',' . $this->processValue($longitude) . ' sfield=' . $this->field . ' d=' . $this->processFloat($distance) . '}';
+        $this->predicates[] = '{!bbox pt=' . $this->processFloat($latitude) . ',' . $this->processFloat($longitude) .
+            ' sfield=' . $this->field . ' d=' . $this->processFloat($distance) . '}';
+
         $this->isHideFieldName = true;
 
         return $this;
@@ -314,7 +320,8 @@ class Criteria
      */
     public function contains($value)
     {
-        if(\is_array($value)) {
+        if (\is_array($value)) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($value as $item) {
                 $this->contains($item);
             }
@@ -334,7 +341,8 @@ class Criteria
      */
     public function startsWith($prefix)
     {
-        if(\is_array($prefix)) {
+        if (\is_array($prefix)) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($prefix as $item) {
                 $this->startsWith($item);
             }
@@ -355,7 +363,8 @@ class Criteria
      */
     public function endsWith($postfix)
     {
-        if(\is_array($postfix)) {
+        if (\is_array($postfix)) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($postfix as $item) {
                 $this->endsWith($item);
             }
@@ -405,7 +414,8 @@ class Criteria
             throw new InvalidArgumentException('Levenshtein Distance has to be within its bounds (0.0 - 1.0).');
         }
 
-        $this->predicates[] = $this->processValue($value) . '~' . ($levenshteinDistance === null ? '' : $this->processFloat($levenshteinDistance));
+        $this->predicates[] = $this->processValue($value) . '~' .
+            ($levenshteinDistance === null ? '' : $this->processFloat($levenshteinDistance));
 
         return $this;
     }
@@ -511,22 +521,23 @@ class Criteria
             $query .= ' ' . $node->getOperator() . ' ';
         }
 
-        if($node->getType() === Node::TYPE_CROTCH) {
-            $addsParentheses = $node->isNegatingWholeChildren() || ($node !== $this->root && \count($node->getChildren()) > 1);
+        if ($node->getType() === Node::TYPE_CROTCH) {
+            $addsParentheses = $node->isNegatingWholeChildren()
+                || ($node !== $this->root && \count($node->getChildren()) > 1);
 
-            if($node->isNegatingWholeChildren()) {
+            if ($node->isNegatingWholeChildren()) {
                 $query .= '-';
             }
 
-            if($addsParentheses) {
+            if ($addsParentheses) {
                 $query .= '(';
             }
 
-            foreach($node->getChildren() as $child) {
+            foreach ($node->getChildren() as $child) {
                 $query .= $this->traverse($child);
             }
 
-            if($addsParentheses) {
+            if ($addsParentheses) {
                 $query .= ')';
             }
         } else {// if ($node->getType() === Node::TYPE_LEAF) { is always true
@@ -552,10 +563,10 @@ class Criteria
             }
 
             $i = 0;
-            while($i < $countPredicates) {
+            while ($i < $countPredicates) {
                 $query .= $criteria->predicates[$i];
 
-                if(($i + 1) !== $countPredicates) {
+                if (($i + 1) !== $countPredicates) {
                     $query .= ' ';// field:(a b c d...) This falls upon the solr q.op param (default OR)
                 }
 
@@ -580,15 +591,15 @@ class Criteria
      */
     private function processValue($value)
     {
-        if($value === '*') {
+        if ($value === '*') {
             return $value;
         }
 
-        if($value instanceof DateTime) {
+        if ($value instanceof DateTime) {
             $value = $value->format('Y-m-d\TH:i:s\Z');
         }
 
-        if(\is_bool($value)) {
+        if (\is_bool($value)) {
             return $value ? 'true' : 'false';
         }
 
@@ -596,7 +607,7 @@ class Criteria
         $value = \preg_replace('/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\/|\\\)/', '\\\$1', (string) $value);
 
         // Sanitize multiple words
-        if(\strpos($value, ' ')){
+        if (\strpos($value, ' ')) {
             $value = '"' . $value . '"';
         }
 
@@ -621,7 +632,9 @@ class Criteria
     private function assertNotBlanks($value)
     {
         if (\strpos($value, ' ')) {
-            throw new InvalidArgumentException('Cannot construct query with white spaces. Use expression or multitple clauses instead.');
+            throw new InvalidArgumentException(
+                'Cannot construct query with white spaces. Use expression or multitple clauses instead.'
+            );
         }
     }
 
