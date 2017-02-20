@@ -163,10 +163,10 @@ class CriteriaReadmeTest extends CriteriaBaseTest
         self::assertEquals('good-actions:[10 TO *] OR bad-actions:[* TO 5]', $goodPeople->getQuery());
         
         $gifts = Criteria::where('gift-name')->sloppy('LED TV GoPro Oculus Tablet Laptop', 2)
-                                ->andWhere('gift-type')->fuzzy('information', 0.4)->startsWith('tech')
+                                ->andWhere('gift-type')->fuzzy('information', 4)->startsWith('tech')
                                 ->andWhere('__query__')->expression('{!dismax qf=myfield}how now brown cow');
 
-        self::assertEquals('gift-name:"LED TV GoPro Oculus Tablet Laptop"~2 AND gift-type:(information~0.4 tech*) AND __query__:{!dismax qf=myfield}how now brown cow', $gifts->getQuery());
+        self::assertEquals('gift-name:"LED TV GoPro Oculus Tablet Laptop"~2 AND gift-type:(information~4 tech*) AND __query__:{!dismax qf=myfield}how now brown cow', $gifts->getQuery());
 
         $christmas = new DateTime('2016-12-25');
         $contributors = ['Christoph', 'Philipp', 'Francisco', 'Fabio'];
@@ -180,7 +180,7 @@ class CriteriaReadmeTest extends CriteriaBaseTest
                                             ->orWhere($goodPeople)
                                 );
 
-        self::assertEquals("-gift-received:[* TO *] AND chimney:[* TO *] AND date:(2016\\-12\\-25T00\\:00\\:00Z [1970\\-01\\-01T00\\:00\\:00Z TO *]) AND (santa-name:(*Noel* *Claus* *Natale* *Baba* *Nicolas*) AND santa-beard-exists:true AND santa-beard-lenght:[5.5 TO 10] AND santa-beard-color:(whi* *te) AND {!bbox pt=38.116181,-86.929463 sfield=position d=100.5}) AND (gift-name:\"LED TV GoPro Oculus Tablet Laptop\"~2 AND gift-type:(information~0.4 tech*) AND __query__:{!dismax qf=myfield}how now brown cow) AND (name:(Christoph Philipp Francisco Fabio)^2.0 OR (good-actions:[10 TO *] OR bad-actions:[* TO 5]))", $giftReceivers->getQuery());
+        self::assertEquals("-gift-received:[* TO *] AND chimney:[* TO *] AND date:(2016\\-12\\-25T00\\:00\\:00Z [1970\\-01\\-01T00\\:00\\:00Z TO *]) AND (santa-name:(*Noel* *Claus* *Natale* *Baba* *Nicolas*) AND santa-beard-exists:true AND santa-beard-lenght:[5.5 TO 10] AND santa-beard-color:(whi* *te) AND {!bbox pt=38.116181,-86.929463 sfield=position d=100.5}) AND (gift-name:\"LED TV GoPro Oculus Tablet Laptop\"~2 AND gift-type:(information~4 tech*) AND __query__:{!dismax qf=myfield}how now brown cow) AND (name:(Christoph Philipp Francisco Fabio)^2.0 OR (good-actions:[10 TO *] OR bad-actions:[* TO 5]))", $giftReceivers->getQuery());
     }
 }
 
