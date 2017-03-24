@@ -414,6 +414,12 @@ class Criteria
             throw new InvalidArgumentException('Levenshtein Distance has to be 0 or above');
         }
 
+        /** Float deprecated in Solr */
+        if(is_float($levenshteinDistance)) {
+            $this->predicates[] = $this->processValue($value) . '~' . ($levenshteinDistance === null ? '' : $this->processFloat($levenshteinDistance));
+            return $this;
+        }
+
         $this->predicates[] = $this->processValue($value) . '~' .
             (is_null($levenshteinDistance) ? '' : (int) $levenshteinDistance);
 
