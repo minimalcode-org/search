@@ -3,7 +3,6 @@
 namespace Minimalcode\Search\Tests;
 
 use Minimalcode\Search\Criteria;
-use Minimalcode\Search\CriteriaBaseTest;
 
 class SpringCriteriaTest extends CriteriaBaseTest
 {
