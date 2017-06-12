@@ -404,7 +404,7 @@ class Criteria
      * Crates new predicate with trailing ~ optionally followed by levensteinDistance.
      *
      * @param string $value
-     * @param int $levenshteinDistance optional
+     * @param int|float $levenshteinDistance optional
      * @return $this
      * @throws \InvalidArgumentException if levensteinDistance with wrong bounds
      */
@@ -415,13 +415,9 @@ class Criteria
         }
 
         /** Float deprecated in Solr */
-        if(is_float($levenshteinDistance)) {
-            $this->predicates[] = $this->processValue($value) . '~' . ($levenshteinDistance === null ? '' : $this->processFloat($levenshteinDistance));
-            return $this;
-        }
-
         $this->predicates[] = $this->processValue($value) . '~' .
-            (is_null($levenshteinDistance) ? '' : (int) $levenshteinDistance);
+            ($levenshteinDistance === null ? '' :
+                (is_float($levenshteinDistance) ? $this->processFloat($levenshteinDistance) : (int) $levenshteinDistance));
 
         return $this;
     }
