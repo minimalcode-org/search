@@ -1,8 +1,9 @@
 <?php
 
-namespace Minimalcode\Search;
+namespace Minimalcode\Search\Tests;
 
 use DateTime;
+use Minimalcode\Search\Criteria;
 
 class CriteriaTest extends CriteriaBaseTest
 {

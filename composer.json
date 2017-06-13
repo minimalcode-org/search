@@ -21,6 +21,6 @@
     "solarium/solarium": "*"
   },
   "autoload": {
-    "psr-4": { "Minimalcode\\Search\\": "src/Minimalcode/Search/" }
+    "psr-4": { "Minimalcode\\Search\\": "src/" }
   }
 }
