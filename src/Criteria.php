@@ -404,18 +404,20 @@ class Criteria
      * Crates new predicate with trailing ~ optionally followed by levensteinDistance.
      *
      * @param string $value
-     * @param float $levenshteinDistance optional
+     * @param int|float $levenshteinDistance optional
      * @return $this
      * @throws \InvalidArgumentException if levensteinDistance with wrong bounds
      */
     public function fuzzy($value, $levenshteinDistance = null)
     {
-        if ($levenshteinDistance !== null && ($levenshteinDistance < 0 || $levenshteinDistance > 1)) {
-            throw new InvalidArgumentException('Levenshtein Distance has to be within its bounds (0.0 - 1.0).');
+        if ($levenshteinDistance !== null && ($levenshteinDistance < 0)) {
+            throw new InvalidArgumentException('Levenshtein Distance has to be 0 or above');
         }
 
+        /** Float deprecated in Solr */
         $this->predicates[] = $this->processValue($value) . '~' .
-            ($levenshteinDistance === null ? '' : $this->processFloat($levenshteinDistance));
+            ($levenshteinDistance === null ? '' :
+                (is_float($levenshteinDistance) ? $this->processFloat($levenshteinDistance) : (int) $levenshteinDistance));
 
         return $this;
     }

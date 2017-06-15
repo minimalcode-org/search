@@ -120,7 +120,7 @@ class CriteriaTest extends CriteriaBaseTest
     public function testFuzzyWithInvalidDistanceException()
     {
         /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
-        Criteria::where('field_1')->fuzzy('a b', 2);
+        Criteria::where('field_1')->fuzzy('a b', -1);
     }
 
     /**

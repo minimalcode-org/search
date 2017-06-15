@@ -145,10 +145,17 @@ class SpringCriteriaTest extends CriteriaBaseTest
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
-    public function testFuzzyWithDistance()
+    public function testFuzzyWithDistanceFloat()
     {
         $criteria = Criteria::where('field_1')->fuzzy('value_1', 0.5);
         self::assertEquals('field_1:value_1~0.5', $criteria->getQuery());
+        self::assertCount(1, $this->getPredicates($criteria));
+    }
+
+    public function testFuzzyWithDistance()
+    {
+        $criteria = Criteria::where('field_1')->fuzzy('value_1', 5);
+        self::assertEquals('field_1:value_1~5', $criteria->getQuery());
         self::assertCount(1, $this->getPredicates($criteria));
     }
 
