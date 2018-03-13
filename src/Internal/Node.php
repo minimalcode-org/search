@@ -19,9 +19,9 @@ namespace Minimalcode\Search\Internal;
 use Minimalcode\Search\Criteria;
 
 /**
- * Node tree rappresentation for Criteria.
+ * Node tree representation for Criteria.
  *
- * This tree-like logic is needeed for features like nesting and connecting.
+ * This tree-like logic is needed for features like nesting and connecting.
  *
  * The class is actually a clear abstract+impls architecture, but for the lack of
  * private classes in PHP language (and to keep the classes count low) the
@@ -38,7 +38,7 @@ use Minimalcode\Search\Criteria;
     const OPERATOR_BLANK    = '';
 
     const TYPE_LEAF         = 0;
-    const TYPE_CROTCH       = 1;
+    const TYPE_BRANCH       = 1;
 
     /******* private abstract class Node *********************************** */
 
@@ -53,7 +53,7 @@ use Minimalcode\Search\Criteria;
     /** @var Criteria */
     private $criteria;
 
-    /******* private class Crotch extends Node ***************************** */
+    /******* private class Branch extends Node ***************************** */
 
     /** @var Node[] */
     private $children = [];
@@ -81,7 +81,7 @@ use Minimalcode\Search\Criteria;
     }
 
     /**
-     * Injects a (potentially complex tree-like) node crotch into this node.
+     * Injects a (potentially complex tree-like) node branch into this node.
      *
      * @param string $operator ("AND"|"OR"|"")
      * @param Node $root
@@ -89,9 +89,9 @@ use Minimalcode\Search\Criteria;
      */
     public function inject($operator, Node $root)
     {
-        $crotch = new Node(self::TYPE_CROTCH, $operator);
-        $crotch->children[] = $root;
-        $this->children[] = $crotch;
+        $branch = new Node(self::TYPE_BRANCH, $operator);
+        $branch->children[] = $root;
+        $this->children[] = $branch;
 
         return $this;
     }
@@ -103,7 +103,7 @@ use Minimalcode\Search\Criteria;
      * @param Criteria $criteria
      * @return $this
      */
-    public function append($operator, Criteria $criteria)
+    public function append($operator, Criteria $criteria): Node
     {
         $this->children[] = new Node(self::TYPE_LEAF, $operator, $criteria);
         $this->mostRecentCriteria = $criteria;
@@ -116,13 +116,13 @@ use Minimalcode\Search\Criteria;
      *
      * @return $this
      */
-    public function connect()
+    public function connect(): Node
     {
-        $crotch = new Node(self::TYPE_CROTCH, self::OPERATOR_BLANK, null);
-        $crotch->children = \array_merge($crotch->children, $this->children);
-        $crotch->isNegatingWholeChildren = $this->isNegatingWholeChildren;
+        $branch = new Node(self::TYPE_BRANCH, self::OPERATOR_BLANK, null);
+        $branch->children = array_merge($branch->children, $this->children);
+        $branch->isNegatingWholeChildren = $this->isNegatingWholeChildren;
         $this->isNegatingWholeChildren = false;
-        $this->children = [$crotch];
+        $this->children = [$branch];
         
         return $this;
     }
@@ -138,7 +138,7 @@ use Minimalcode\Search\Criteria;
     /**
      * @return Criteria
      */
-    public function getCriteria()
+    public function getCriteria(): Criteria
     {
         return $this->criteria;
     }
@@ -146,7 +146,7 @@ use Minimalcode\Search\Criteria;
     /**
      * @return Node[]
      */
-    public function getChildren()
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -154,7 +154,7 @@ use Minimalcode\Search\Criteria;
     /**
      * @return Criteria
      */
-    public function getMostRecentCriteria()
+    public function getMostRecentCriteria(): Criteria
     {
         return $this->mostRecentCriteria;
     }
@@ -162,7 +162,7 @@ use Minimalcode\Search\Criteria;
     /**
      * @return boolean
      */
-    public function isNegatingWholeChildren()
+    public function isNegatingWholeChildren(): bool
     {
         return $this->isNegatingWholeChildren;
     }
@@ -170,7 +170,7 @@ use Minimalcode\Search\Criteria;
     /**
      * @param boolean $negatingWholeChildren
      */
-    public function setNegatingWholeChildren($negatingWholeChildren)
+    public function setNegatingWholeChildren($negatingWholeChildren): void
     {
         $this->isNegatingWholeChildren = $negatingWholeChildren;
     }
